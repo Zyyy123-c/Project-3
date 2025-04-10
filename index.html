@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Extreme To-Do List</title>
-  <!-- Pixelated font from Google Fonts -->
+  <!-- Pixelated font from Google Fonts for that retro, playful look -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     /* Global Reset */
@@ -15,7 +15,7 @@
     /* Global Styles */
     body {
       font-family: 'Press Start 2P', cursive;
-      background: #ffcc00; /* Bright, playful background */
+      background: #ffcc00;
       padding: 20px;
       display: flex;
       justify-content: center;
@@ -26,17 +26,17 @@
       text-align: center;
       margin-bottom: 20px;
     }
-    /* Container holding the entire to-do list app */
+    /* Container for the to-do list app */
     .container {
       background: #fff;
       border: 4px solid #000;
       border-radius: 10px;
       padding: 20px;
-      width: 320px;
-      position: relative;
-      overflow: hidden;
+      width: 360px;  /* Increased width so the button won't be pushed off */
+      /* Remove overflow hidden to ensure inner elements are not clipped */
+      overflow: visible;
     }
-    /* Input styles */
+    /* Input Area */
     .input-container {
       display: flex;
       margin-bottom: 20px;
@@ -61,7 +61,7 @@
     .input-container button:hover {
       transform: scale(1.1);
     }
-    /* Task list styles */
+    /* Task List Styles */
     ul {
       list-style: none;
     }
@@ -74,12 +74,16 @@
       justify-content: space-between;
       align-items: center;
       font-size: 14px;
+      transition: transform 0.3s;
     }
     li.completed {
       text-decoration: line-through;
       opacity: 0.6;
     }
-    /* Action buttons for each task */
+    li.completed:hover {
+      transform: scale(1.05);
+    }
+    /* Buttons on each task */
     .actions button {
       background: #1e90ff;
       border: 2px solid #000;
@@ -93,10 +97,16 @@
     .actions button:hover {
       transform: scale(1.1);
     }
-    /* Confetti effect for celebration */
+    /* Confetti effect using emoji */
     @keyframes confettiFall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(200px) rotate(360deg); opacity: 0; }
+      0% { 
+        transform: translateY(0) rotate(0deg); 
+        opacity: 1; 
+      }
+      100% { 
+        transform: translateY(200px) rotate(360deg); 
+        opacity: 0; 
+      }
     }
     .confetti {
       position: absolute;
@@ -115,93 +125,98 @@
     </div>
     <ul id="taskList"></ul>
   </div>
-
+  
   <script>
-    // Retrieve tasks from localStorage or initialize an empty array
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    document.addEventListener("DOMContentLoaded", function() {
+      // Retrieve tasks from localStorage or initialize as an empty array
+      let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Save tasks to localStorage
-    function saveTasks() {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-
-    // Render tasks on the UI
-    function renderTasks() {
-      const taskList = document.getElementById('taskList');
-      taskList.innerHTML = '';
-      tasks.forEach((task, index) => {
-        const li = document.createElement('li');
-        li.className = task.completed ? 'completed' : '';
-        li.innerText = task.text;
-        // Create action buttons for completing and deleting tasks
-        const actions = document.createElement('div');
-        actions.className = 'actions';
-        const completeBtn = document.createElement('button');
-        completeBtn.innerText = 'Done';
-        completeBtn.onclick = function() {
-          completeTask(index);
-        };
-        const deleteBtn = document.createElement('button');
-        deleteBtn.innerText = 'Del';
-        deleteBtn.onclick = function() {
-          deleteTask(index);
-        };
-        actions.appendChild(completeBtn);
-        actions.appendChild(deleteBtn);
-        li.appendChild(actions);
-        taskList.appendChild(li);
-      });
-    }
-
-    // Add a new task
-    function addTask() {
-      const taskInput = document.getElementById('taskInput');
-      if (taskInput.value.trim() === '') return;
-      tasks.push({ text: taskInput.value.trim(), completed: false });
-      taskInput.value = '';
-      saveTasks();
-      renderTasks();
-    }
-
-    // Mark a task as complete and trigger celebration
-    function completeTask(index) {
-      if (tasks[index].completed) return; // already completed, do nothing
-      tasks[index].completed = true;
-      saveTasks();
-      renderTasks();
-      playCelebrationAnimation();
-      // Show a random motivational alert
-      const messages = ["Great job!", "You're on fire!", "Keep it up!", "Awesome!"];
-      alert(messages[Math.floor(Math.random() * messages.length)]);
-    }
-
-    // Delete a task
-    function deleteTask(index) {
-      tasks.splice(index, 1);
-      saveTasks();
-      renderTasks();
-    }
-
-    // Create a fun confetti animation effect using emoji
-    function playCelebrationAnimation() {
-      const container = document.querySelector('.container');
-      for (let i = 0; i < 10; i++) {
-        const emoji = document.createElement('div');
-        emoji.className = 'confetti';
-        emoji.innerText = ["🎉", "💥", "🥳", "✨"][Math.floor(Math.random() * 4)];
-        // Place each confetti emoji at a random horizontal position
-        emoji.style.left = Math.random() * container.clientWidth + 'px';
-        emoji.style.top = Math.random() * container.clientHeight + 'px';
-        container.appendChild(emoji);
-        // Remove the emoji after its animation completes (1s)
-        setTimeout(() => {
-          container.removeChild(emoji);
-        }, 1000);
+      // Save tasks array to localStorage
+      function saveTasks() {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
       }
-    }
 
-    // Render tasks on initial load
-    renderTasks();
+      // Render tasks on the UI
+      function renderTasks() {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = ''; // Clear previous tasks
+        tasks.forEach((task, index) => {
+          const li = document.createElement('li');
+          li.className = task.completed ? 'completed' : '';
+          li.innerText = task.text;
+          
+          // Create a container for action buttons
+          const actions = document.createElement('div');
+          actions.className = 'actions';
+
+          const completeBtn = document.createElement('button');
+          completeBtn.innerText = 'Done';
+          completeBtn.onclick = function() {
+            completeTask(index);
+          };
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.innerText = 'Del';
+          deleteBtn.onclick = function() {
+            deleteTask(index);
+          };
+
+          actions.appendChild(completeBtn);
+          actions.appendChild(deleteBtn);
+          li.appendChild(actions);
+          taskList.appendChild(li);
+        });
+      }
+
+      // Function to add a new task
+      window.addTask = function() {
+        const taskInput = document.getElementById('taskInput');
+        if (taskInput.value.trim() === '') return;
+        console.log("Adding task:", taskInput.value);
+        tasks.push({ text: taskInput.value.trim(), completed: false });
+        taskInput.value = ''; // Clear the input field
+        saveTasks();
+        renderTasks();
+      };
+
+      // Function to mark a task as complete and trigger celebration effects
+      window.completeTask = function(index) {
+        if (tasks[index].completed) return;
+        tasks[index].completed = true;
+        saveTasks();
+        renderTasks();
+        playCelebrationAnimation();
+        // Show a random motivational message in an alert
+        const messages = ["Great job!", "You're on fire!", "Keep it up!", "Awesome!"];
+        alert(messages[Math.floor(Math.random() * messages.length)]);
+      };
+
+      // Function to delete a task from the list
+      window.deleteTask = function(index) {
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+      };
+
+      // Function to play confetti animation effect using emoji
+      function playCelebrationAnimation() {
+        const container = document.querySelector('.container');
+        for (let i = 0; i < 10; i++) {
+          const emoji = document.createElement('div');
+          emoji.className = 'confetti';
+          emoji.innerText = ["🎉", "💥", "🥳", "✨"][Math.floor(Math.random() * 4)];
+          emoji.style.left = Math.random() * container.clientWidth + 'px';
+          emoji.style.top = Math.random() * container.clientHeight + 'px';
+          container.appendChild(emoji);
+          setTimeout(() => {
+            container.removeChild(emoji);
+          }, 1000);
+        }
+      }
+
+      // Initial render of tasks on page load
+      renderTasks();
+    });
   </script>
 </body>
 </html>
