@@ -2,31 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Extreme To‑Do List</title>
-  <!-- Pixelated font -->
+  <title>00:00 – Extreme To-Do List</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <!-- SortableJS for drag‑drop -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     :root {
-      --bg: #ffcc00;
-      --fg: #000;
+      --bg: #ffcc00; 
+      --fg: #000; 
       --card: #fff;
-      --accent-success: #28a745;
+      --accent-success: #28a745; 
       --accent-overdue: #dc3545;
-      --btn-bg: #1e90ff;
+      --btn-bg: #1e90ff; 
       --btn-fg: #fff;
     }
     [data-theme="dark"] {
-      --bg: #222;
-      --fg: #eee;
-      --card: #333;
+      --bg: #222; --fg: #eee; --card: #333;
     }
     * { margin:0; padding:0; box-sizing:border-box }
     body {
       font-family:'Press Start 2P',cursive;
-      background:var(--bg);
-      color:var(--fg);
+      background:var(--bg); color:var(--fg);
       display:flex;justify-content:center;align-items:center;
       height:100vh;overflow:hidden;
       transition:background .3s,color .3s;
@@ -35,9 +30,9 @@
       background:var(--card);
       border:4px solid var(--fg);
       border-radius:10px;
-      width:80vw;max-width:600px;
-      height:80vh;max-height:700px;
-      padding:20px;position:relative;overflow:auto;
+      width:80vw; max-width:600px;
+      height:80vh; max-height:700px;
+      padding:20px; position:relative; overflow:auto;
     }
     header {
       display:flex;justify-content:space-between;align-items:center;
@@ -45,40 +40,42 @@
     }
     h1 { font-size:1.2em }
     .theme-toggle {
-      background:var(--btn-bg);
-      color:var(--btn-fg);
-      border:none;padding:5px 10px;
-      cursor:pointer;font-size:.8em;
+      background:var(--btn-bg); color:var(--btn-fg);
+      border:none; padding:5px 10px;
+      cursor:pointer; font-size:.8em;
     }
+
+    /* Input row */
     .input-container {
       display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;
     }
     .input-container input[type=text],
     .input-container input[type=datetime-local] {
-      flex:1;padding:10px;border:2px solid var(--fg);
-      background:var(--card);color:var(--fg);
-      font-family:'Press Start 2P',cursive;font-size:12px;
+      flex:1; padding:10px; border:2px solid var(--fg);
+      background:var(--card); color:var(--fg);
+      font-family:'Press Start 2P',cursive; font-size:12px;
     }
     .input-container button {
-      background:var(--btn-bg);
-      color:var(--btn-fg);
+      background:var(--btn-bg); color:var(--btn-fg);
       border:2px solid var(--fg);
-      padding:10px 20px;cursor:pointer;
+      padding:10px 20px; cursor:pointer;
       transition:transform .2s;
-      font-family:'Press Start 2P',cursive;font-size:12px;
+      font-family:'Press Start 2P',cursive; font-size:12px;
     }
     .input-container button:hover { transform:scale(1.1) }
+
+    /* Task list */
     ul { list-style:none }
     li {
       background:var(--card);
       border:2px solid var(--fg);
-      padding:10px;margin-bottom:10px;
+      padding:10px; margin-bottom:10px;
       display:flex;justify-content:space-between;
       align-items:center;font-size:12px;
-      position:relative;transition:transform .2s;
+      position:relative; transition:transform .2s;
     }
     li.completed {
-      text-decoration:line-through;opacity:.6;
+      text-decoration:line-through; opacity:.6;
       border-color:var(--accent-success);
     }
     li.due-soon:not(.completed):not(.expired) {
@@ -86,51 +83,55 @@
       border-color:var(--accent-success);
     }
     li.expired {
-      background:#fcc;border-color:var(--accent-overdue);
+      background:#fcc; border-color:var(--accent-overdue);
     }
-    @keyframes pulse{
-      0%,100%{box-shadow:0 0 0 var(--accent-success)} 
-      50%{box-shadow:0 0 8px var(--accent-success)}
+    @keyframes pulse {
+      0%,100% { box-shadow:0 0 0 var(--accent-success) }
+      50%     { box-shadow:0 0 8px var(--accent-success) }
     }
+
+    /* Action buttons */
     .actions button {
-      background:var(--btn-bg);
-      color:var(--btn-fg);
+      background:var(--btn-bg); color:var(--btn-fg);
       border:2px solid var(--fg);
-      margin-left:5px;padding:5px;
-      cursor:pointer;transition:transform .2s;
+      margin-left:5px; padding:5px;
+      cursor:pointer; transition:transform .2s;
       font-size:10px;
     }
-    .actions button:hover{transform:scale(1.1)}
+    .actions button:hover { transform:scale(1.1) }
+
+    /* Inline-edit fade-in */
     .inline-input {
-      position:absolute;top:0;left:0;width:100%;height:100%;
-      padding:10px;border:none;
-      font-family:'Press Start 2P',cursive;font-size:12px;
-      background:rgba(255,255,255,.9);animation:fadeIn .3s;
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      padding:10px; border:none;
+      font-family:'Press Start 2P',cursive; font-size:12px;
+      background:rgba(255,255,255,.9);
+      animation:fadeIn .3s;
     }
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    /* Bottom‑right timer */
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* Top-right timer */
     #timerContainer {
-      position:fixed;bottom:20px;right:20px;
-      background:var(--btn-bg);color:var(--btn-fg);
-      border:2px solid var(--fg);padding:8px 12px;
-      display:flex;gap:8px;align-items:center;
-      border-radius:4px;font-size:12px;
-      font-family:'Press Start 2P',cursive;
+      position:fixed; top:20px; right:20px;
+      background:var(--btn-bg); color:var(--btn-fg);
+      border:2px solid var(--fg); padding:8px 12px;
+      display:flex; gap:8px; align-items:center;
+      border-radius:4px; font-size:12px;
+      font-family:'Press Start 2P',cursive; cursor:pointer;
     }
     #timerInput {
-      width:40px;padding:4px;border:none;
-      text-align:center;background:var(--card);color:var(--fg);
-      font-family:'Press Start 2P',cursive;font-size:12px;
+      width:40px; padding:4px; border:none;
+      text-align:center; background:var(--card); color:var(--fg);
+      font-family:'Press Start 2P',cursive; font-size:12px;
     }
-    #timerDisplay {
-      min-width:40px;text-align:center;
-    }
-    /* particles */
+    #timerDisplay { min-width:40px; text-align:center }
+
+    /* Confetti/bomb particles */
     @keyframes fall {
-      to{transform:translateY(100vh) rotate(360deg);opacity:0}
+      to { transform:translateY(100vh) rotate(360deg); opacity:0 }
     }
     .particle {
-      position:fixed;pointer-events:none;font-size:24px;
+      position:fixed; pointer-events:none; font-size:24px;
       animation:fall 2s ease-out forwards;
     }
   </style>
@@ -139,7 +140,7 @@
 
   <div class="container">
     <header>
-      <h1>Extreme To‑Do List</h1>
+      <h1>Extreme To-Do</h1>
       <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark</button>
     </header>
 
@@ -152,54 +153,64 @@
     <ul id="taskList"></ul>
   </div>
 
-  <!-- Simplified timer -->
   <div id="timerContainer" onclick="toggleTimer()">
-    <input id="timerInput" type="number" min="0" placeholder="Min">
+    <input id="timerInput" type="number" min="1" placeholder="Min">
     <div id="timerDisplay">00:00</div>
   </div>
 
   <script>
-  document.addEventListener('DOMContentLoaded',()=>{
-
-    // Tasks state
-    let tasks = JSON.parse(localStorage.getItem('tasks'))||[];
+    // — State & Persistence —
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const expireTimers = {};
-
-    // Timer state
-    let timer = {secs:0, running:false, interval:null};
-
-    // Audio
+    let timer = { secs:0, running:false, interval:null };
     const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+
+    // — Helpers —
+    function save(){ localStorage.setItem('tasks', JSON.stringify(tasks)); }
+    function playParticles(ok){
+      const sy = ok
+        ? ["🎉","🥳","✨","💥"]
+        : ["💣","😡"];
+      for(let i=0;i<150;i++){
+        const d=document.createElement('div');
+        d.className = 'particle';
+        d.innerText = sy[Math.random()*sy.length|0];
+        d.style.left = Math.random()*100 + 'vw';
+        d.style.top  = (Math.random()*10 - 10) + 'vh';
+        document.body.append(d);
+        setTimeout(()=>d.remove(),2000);
+      }
+    }
     function playCheer(){
-      const gain = audioCtx.createGain(); gain.gain.value=0.8; gain.connect(audioCtx.destination);
+      const gain = audioCtx.createGain(); gain.gain.value = 0.8; gain.connect(audioCtx.destination);
       [523.3,659.3,784.0].forEach((f,i)=>{
-        const osc = audioCtx.createOscillator();
-        osc.type='triangle'; osc.frequency.value=f;
-        osc.connect(gain);
-        osc.start(audioCtx.currentTime + i*0.1);
-        osc.stop(audioCtx.currentTime + i*0.1 + 0.2);
+        const o = audioCtx.createOscillator();
+        o.type='triangle'; o.frequency.value=f;
+        o.connect(gain);
+        o.start(audioCtx.currentTime + i*0.1);
+        o.stop(audioCtx.currentTime + i*0.1 + 0.2);
       });
       playParticles(true);
     }
     function playBomb(){
       const gain = audioCtx.createGain(); gain.gain.value=1; gain.connect(audioCtx.destination);
-      const osc = audioCtx.createOscillator();
-      osc.type='square'; osc.frequency.value=60;
-      osc.connect(gain); osc.start(); osc.stop(audioCtx.currentTime+0.5);
+      const o = audioCtx.createOscillator();
+      o.type='square'; o.frequency.value=60;
+      o.connect(gain); o.start(); o.stop(audioCtx.currentTime+0.5);
       playParticles(false);
     }
 
-    // Persistence & render
-    function save(){ localStorage.setItem('tasks',JSON.stringify(tasks)) }
+    // — Render & Sortable —
     function render(){
-      const ul=document.getElementById('taskList'); ul.innerHTML='';
+      const ul = document.getElementById('taskList');
+      ul.innerHTML = '';
       tasks.forEach(t=>{
-        const li=document.createElement('li');
-        li.dataset.id=t.id;
-        li.innerHTML=`
+        const li = document.createElement('li');
+        li.dataset.id = t.id;
+        li.innerHTML = `
           <div>
             ${t.text}
-            ${t.deadline?`<br><small>Due: ${new Date(t.deadline).toLocaleString()}</small>`:''}
+            ${t.deadline ? `<br><small>Due: ${new Date(t.deadline).toLocaleString()}</small>` : ''}
           </div>
           <div class="actions">
             <button onclick="completeTask('${t.id}')">Done</button>
@@ -209,126 +220,116 @@
         else if(t.expired) li.classList.add('expired');
         else if(t.deadline && new Date(t.deadline)-Date.now()<86400000)
           li.classList.add('due-soon');
-        li.ondblclick=()=>inlineEdit(t.id,li);
+        li.ondblclick = ()=> inlineEdit(t.id, li);
         ul.append(li);
       });
       save();
     }
-
-    // Drag & drop
-    Sortable.create(document.getElementById('taskList'),{animation:150,
+    Sortable.create(document.getElementById('taskList'),{
+      animation:150,
       onEnd:({oldIndex,newIndex})=>{
         tasks.splice(newIndex,0,tasks.splice(oldIndex,1)[0]);
         render();
       }
     });
 
-    // Inline edit
-    function inlineEdit(id,li){
-      const t=tasks.find(x=>x.id===id);
+    // — Inline Edit —
+    function inlineEdit(id, li){
+      const t = tasks.find(x=>x.id===id);
       li.classList.add('editing');
-      const inp=document.createElement('input');
-      inp.value=t.text; inp.className='inline-input';
+      const inp = document.createElement('input');
+      inp.value = t.text; inp.className = 'inline-input';
       li.append(inp); inp.focus();
-      inp.onblur=()=>{ t.text=inp.value||t.text; li.classList.remove('editing'); render() };
-      inp.onkeydown=e=>{ if(e.key==='Enter') inp.blur() };
+      inp.onblur = ()=>{
+        t.text = inp.value || t.text;
+        li.classList.remove('editing');
+        render();
+      };
+      inp.onkeydown = e=> e.key==='Enter' && inp.blur();
     }
 
-    // Add
-    window.addTask=()=>{
-      const txt=document.getElementById('taskInput').value.trim();
-      const dl=document.getElementById('taskDeadline').value;
+    // — Task Actions —
+    function addTask(){
+      const txt = document.getElementById('taskInput').value.trim();
+      const dl  = document.getElementById('taskDeadline').value;
       if(!txt) return;
-      const id=Date.now().toString();
-      tasks.push({id,text:txt,deadline:dl,completed:false,expired:false});
-      document.getElementById('taskInput').value='';
-      document.getElementById('taskDeadline').value='';
+      const id = Date.now().toString();
+      tasks.push({id, text:txt, deadline:dl, completed:false, expired:false});
+      document.getElementById('taskInput').value = '';
+      document.getElementById('taskDeadline').value = '';
       scheduleExpiry(id);
       render();
-    };
-
-    // Schedule expiry
+    }
     function scheduleExpiry(id){
       clearTimeout(expireTimers[id]);
-      const t=tasks.find(x=>x.id===id);
+      const t = tasks.find(x=>x.id===id);
       if(!t.deadline) return;
-      const delay=new Date(t.deadline)-Date.now();
-      if(delay>0) expireTimers[id]=setTimeout(()=>expireTask(id),delay);
+      const delay = new Date(t.deadline) - Date.now();
+      if(delay>0) expireTimers[id] = setTimeout(()=>expireTask(id), delay);
       else expireTask(id);
     }
     function expireTask(id){
-      const t=tasks.find(x=>x.id===id);
+      const t = tasks.find(x=>x.id===id);
       if(!t||t.completed||t.expired) return;
-      t.expired=true; render();
+      t.expired = true; render();
       playBomb();
       alert(`Task “${t.text}” is OVERDUE!`);
     }
-
-    // Complete/Delete
-    window.completeTask=id=>{
-      const t=tasks.find(x=>x.id===id);
+    function completeTask(id){
+      const t = tasks.find(x=>x.id===id);
       if(!t||t.completed||t.expired) return;
-      t.completed=true; clearTimeout(expireTimers[id]);
-      render(); playCheer(); navigator.vibrate?.(200);
-    };
-    window.deleteTask=id=>{
+      t.completed = true;
       clearTimeout(expireTimers[id]);
-      tasks=tasks.filter(x=>x.id!==id);
       render();
-    };
-
-    // Particles
-    function playParticles(ok){
-      const sy = ok?["🎉","🥳","✨","💥"]:["💣","😡"];
-      for(let i=0;i<150;i++){
-        const d=document.createElement('div');
-        d.className='particle'; d.innerText=sy[Math.random()*sy.length|0];
-        d.style.left=Math.random()*100+'vw';
-        d.style.top=(Math.random()*10-10)+'vh';
-        document.body.append(d);
-        setTimeout(()=>d.remove(),2000);
-      }
+      playCheer();
+      navigator.vibrate?.(200);
+    }
+    function deleteTask(id){
+      clearTimeout(expireTimers[id]);
+      tasks = tasks.filter(x=>x.id!==id);
+      render();
     }
 
-    // Theme
-    window.toggleTheme=()=>{
-      document.body.dataset.theme = document.body.dataset.theme==='light'?'dark':'light';
-    };
-
-    // —— Simple Timer ——  
+    // — Timer —
     function updateTimerDisplay(){
-      const d=document.getElementById('timerDisplay');
-      let m=Math.floor(timer.secs/60), s=timer.secs%60;
-      d.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      const d = document.getElementById('timerDisplay');
+      let m = Math.floor(timer.secs/60), s = timer.secs%60;
+      const text = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      d.innerText = text;
+      document.title = text + ' – Extreme To-Do List';
     }
-    window.toggleTimer=()=>{
+    function toggleTimer(){
       if(!timer.running){
         const mins = parseInt(document.getElementById('timerInput').value,10);
         timer.secs = isNaN(mins)?0:mins*60;
-        updateTimerDisplay();
         if(timer.secs<=0) return;
-        timer.running=true;
+        updateTimerDisplay();
+        timer.running = true;
         timer.interval = setInterval(()=>{
           timer.secs--;
           updateTimerDisplay();
           if(timer.secs<=0){
             clearInterval(timer.interval);
-            timer.running=false;
+            timer.running = false;
             playCheer();
             alert('Timer finished!');
           }
         },1000);
       } else {
         clearInterval(timer.interval);
-        timer.running=false;
+        timer.running = false;
       }
-    };
+    }
 
-    // Init expiry for existing tasks
-    tasks.forEach(t=>scheduleExpiry(t.id));
+    // — Theme Toggle —
+    function toggleTheme(){
+      document.body.dataset.theme =
+        document.body.dataset.theme==='light' ? 'dark' : 'light';
+    }
+
+    // — Init —
+    tasks.forEach(t=> scheduleExpiry(t.id));
     render();
-
-  });
   </script>
 </body>
 </html>
